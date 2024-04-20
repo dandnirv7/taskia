@@ -5,6 +5,7 @@ import Register from "@/pages/Register";
 import Dashboard from "@/pages/Dashboard";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import Login from "@/pages/Login";
+import NewTask from "./pages/NewTask";
 import Layout from "@/components/layout/Layout";
 
 export default function App() {
@@ -25,6 +26,16 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/dashboard/add-task"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <NewTask />
+              </Layout>
+            </ProtectedRoute>
+          }
+        ></Route>
       </Routes>
     </BrowserRouter>
   );

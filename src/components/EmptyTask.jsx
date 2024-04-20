@@ -1,4 +1,5 @@
 import noteFavoriteDark from "@/assets/img/note-favorite-dark-orange.svg";
+import { Link } from "react-router-dom";
 
 const EmptyTask = () => {
   return (
@@ -12,12 +13,14 @@ const EmptyTask = () => {
           <p className="text-md">You need to create some tasks for you to do</p>
         </div>
       </div>
-      <button
-        type="button"
-        className="py-3 px-5 text-white bg-gray-300 rounded-full outline-none active:bg-gray-400 bg-gradient-to-b from-[#977FFF] to-[#6F4FFF] font-semibold"
-      >
-        Add New
-      </button>
+      <Link to="add-task">
+        <button
+          type="button"
+          className="py-3 px-5 text-white bg-gray-300 rounded-full outline-none active:bg-gray-400 bg-gradient-to-b from-[#977FFF] to-[#6F4FFF] font-semibold"
+        >
+          Add New
+        </button>
+      </Link>
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import Sidebar from "@components/Sidebar";
 import MainContent from "@components/MainContent";
+import { Toaster } from "../ui/toaster";
 
-import { Toaster } from "@/components/ui/toaster";
 const Layout = ({ children }) => {
   return (
     <div className="flex flex-row w-screen h-screen">
@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
       <MainContent>
         <>{children}</>
       </MainContent>
-      <Toaster />;
+      <Toaster />
     </div>
   );
 };

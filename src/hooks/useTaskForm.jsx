@@ -1,61 +1,70 @@
-"use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import { toast } from "@/components/ui/use-toast";
 
-const FormSchema = z.object({
-  taskName: z.string().min(5, "Task Name must be at least 5 characters long"),
-  deadline: z.date({
-    required_error: "A deadline is required.",
-  }),
-  priority: z.enum(["Low", "Medium", "High"], {
-    required_error: "Priority level can't be empty",
-  }),
+import { useState } from "react";
+
+import { v4 as uuidv4 } from "uuid";
+
+const addTaskSchema = yup.object().shape({
+  taskName: yup.string().required("Taskname is required"),
+  priority: yup
+    .string()
+    .oneOf(["low", "medium", "high"], "Priority level can't be empty")
+    .required("Priority level can't be empty"),
+  deadline: yup
+    .date()
+    .required("Date is required")
+    .typeError("Date is required"),
 });
 
 const useTaskForm = () => {
-  const form = useForm({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      taskName: "",
-      priority: "Low",
-    },
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(addTaskSchema),
   });
 
-  const { formState } = form;
+  const [formData, setFormData] = useState({
+    taskName: "",
+    priority: "",
+    deadline: null,
+  });
 
-  const userLoggedIn = localStorage.getItem("userLoggedIn");
-  const users = JSON.parse(localStorage.getItem("users"));
-
-  const currentUser = users.find((user) => user.username === userLoggedIn);
-  const tasks = currentUser ? currentUser.tasks : [];
-
-  const Toast = () => {
-    toast({
-      description: "Task added successfully!",
-      variant: "success",
-    });
+  const handleChangeValues = (name, value) => {
+    setFormData((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+    setValue(name, value, { shouldValidate: true });
   };
 
-  function onSubmit(data) {
-    const { taskName, deadline, priority } = data;
+  const addTask = (data) => {
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const userLoggedIn = localStorage.getItem("userLoggedIn");
+    const currentUser =
+      users.find((user) => user.username === userLoggedIn) || {};
+    const { tasks } = currentUser;
 
-    function formattedDate(date) {
-      const today = date || new Date();
-      const options = { day: "numeric", month: "long", year: "numeric" };
-      const formatted = today.toLocaleDateString("en-US", options);
-      return formatted;
-    }
+    const Toast = () => {
+      toast({
+        description: "Task added successfully!",
+        variant: "success",
+      });
+    };
 
     const newTask = {
-      createdAt: formattedDate(new Date()),
-      title: taskName,
-      deadline: formattedDate(deadline),
-      priority: priority,
-      id: tasks.length + 1,
-      status: "In Progress",
+      createdAt: new Date(),
+      deadline: data.deadline,
+      id: uuidv4(),
+      priority: data.priority,
+      status: "in progress",
+      title: data.taskName,
     };
 
     const updatedTasks = [...tasks, newTask];
@@ -65,16 +74,23 @@ const useTaskForm = () => {
     );
 
     localStorage.setItem("users", JSON.stringify(updatedUsers));
-
-    form.reset();
-
     Toast();
-  }
+
+    reset();
+    setFormData({
+      taskName: "",
+      priority: "",
+      deadline: null,
+    });
+  };
 
   return {
-    form,
-    formState,
-    onSubmit,
+    register,
+    handleSubmit,
+    formData,
+    errors,
+    handleChangeValues,
+    addTask,
   };
 };
 

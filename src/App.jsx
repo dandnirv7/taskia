@@ -1,12 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NotFound from "@/pages/NotFound";
-import Home from "@pages/Home";
 import Register from "@/pages/Register";
 import Dashboard from "@/pages/Dashboard";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import Login from "@/pages/Login";
-import NewTask from "./pages/NewTask";
 import Layout from "@/components/layout/Layout";
+import { Navigate } from "react-router-dom";
 
 export default function App() {
   return (
@@ -15,8 +14,8 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Home />} />
         <Route
+          index
           path="/dashboard"
           element={
             <ProtectedRoute>
@@ -26,16 +25,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/dashboard/add-task"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <NewTask />
-              </Layout>
-            </ProtectedRoute>
-          }
-        ></Route>
+        <Route path="/" element={<Navigate to="/dashboard" />} />
       </Routes>
     </BrowserRouter>
   );

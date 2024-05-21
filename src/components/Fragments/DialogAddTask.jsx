@@ -10,11 +10,11 @@ import {
 
 import FormAddTask from "./FormAddTask";
 
-function DialogAddTask() {
+const DialogAddTask = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-gradient-to-b from-[#977FFF] to-[#6F4FFF] rounded-full focus-visible:outline-[#977FFF] focus-visible:ring-0 focus-visible:ring-offset-0">
+        <Button className="bg-gradient-to-b from-[#977FFF] to-[#6F4FFF] rounded-full focus-visible:outline-[#977FFF] focus-visible:ring-0 focus-visible:ring-offset-0 py-6">
           Add New Task
         </Button>
       </DialogTrigger>
@@ -29,6 +29,6 @@ function DialogAddTask() {
       </DialogContent>
     </Dialog>
   );
-}
+};
 
 export default DialogAddTask;

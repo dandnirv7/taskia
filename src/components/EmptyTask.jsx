@@ -1,6 +1,5 @@
 import noteFavoriteDark from "@/assets/img/note-favorite-dark-orange.svg";
-import { Link } from "react-router-dom";
-import DialogAddTask from "./Fragments/DialogAddTask";
+import { DialogTask } from "@/components/fragments/DialogTask";
 
 const EmptyTask = () => {
   return (
@@ -14,7 +13,7 @@ const EmptyTask = () => {
           <p className="text-md">You need to create some tasks for you to do</p>
         </div>
       </div>
-      <DialogAddTask />
+      <DialogTask />
     </div>
   );
 };

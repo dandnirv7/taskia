@@ -1,13 +1,11 @@
 import Card from "@/components/Card";
 import EmptyTask from "@/components/EmptyTask";
-import DialogAddTask from "@/components/Fragments/DialogAddTask";
+import { DialogTask } from "@/components/fragments/DialogTask";
+import { TaskContext } from "@/context/TaskContext";
+import { useContext } from "react";
 
 const Dashboard = () => {
-  const userLoggedIn = localStorage.getItem("userLoggedIn");
-  const users = JSON.parse(localStorage.getItem("users"));
-
-  const currentUser = users.find((user) => user.username === userLoggedIn);
-  const tasks = currentUser ? currentUser.tasks : [];
+  const { tasks, userLoggedIn } = useContext(TaskContext);
 
   return (
     <main>
@@ -16,7 +14,7 @@ const Dashboard = () => {
           <h1 className="text-3xl font-bold">Manage Task</h1>
           <p>Set the goals to improve your self</p>
         </div>
-        {tasks.length > 0 && <DialogAddTask />}
+        {tasks.length > 0 && <DialogTask />}
       </div>
 
       <div className="flex flex-col gap-5 overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 h-[60vh] pr-2">

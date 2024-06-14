@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import Navbar from "@components/Navbar";
+import Navbar from "@/components/Navbar";
 
 const MainContent = ({ children }) => {
   const username = localStorage.getItem("userLoggedIn");

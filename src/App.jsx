@@ -6,6 +6,7 @@ import ProtectedRoute from "@/routes/ProtectedRoute";
 import Login from "@/pages/Login";
 import Layout from "@/components/layout/Layout";
 import { Navigate } from "react-router-dom";
+import { TaskProvider } from "./context/TaskContext";
 
 export default function App() {
   return (
@@ -20,7 +21,9 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Layout>
-                <Dashboard />
+                <TaskProvider>
+                  <Dashboard />
+                </TaskProvider>
               </Layout>
             </ProtectedRoute>
           }

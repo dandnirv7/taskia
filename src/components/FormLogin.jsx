@@ -1,54 +1,47 @@
-import { useNavigate } from "react-router-dom";
-import InputField from "./InputField";
-import useLoginForm from "../hooks/useLoginForm";
+import { useLoginForm } from "@/hooks/useLoginForm";
+import { TextInput } from "@/components/elements/TextInput";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import profile from "@/assets/img/profile-circle.svg";
 
-const Login = () => {
-  const navigate = useNavigate();
-  const {
-    username,
-    isUsernameNotFound,
-    isRememberMe,
-    handleUsernameChange,
-    handleBlur,
-    toggleRememberMe,
-    handleLoginSubmit,
-  } = useLoginForm(navigate);
+export const FormLogin = () => {
+  const { handleSubmit, handleValues, loginData, errors, loginUser } =
+    useLoginForm();
 
   return (
-    <form onSubmit={handleLoginSubmit}>
-      <InputField
+    <form onSubmit={handleSubmit(loginUser)}>
+      <TextInput
+        id="username"
+        image={profile}
+        alt="profil-icon"
         label="Username"
-        name="username"
-        value={username}
-        onChange={handleUsernameChange}
-        onBlur={handleBlur}
-        isValid={!isUsernameNotFound}
-        errorMessage="Username not found"
+        value={loginData.username}
+        onChange={(e) => handleValues("username", e.target.value)}
         placeholder="Enter your username"
+        errors={errors?.username}
       />
-
-      <div className="flex flex-row items-center gap-2 mt-5">
-        <input
-          type="checkbox"
+      <div className="flex items-center gap-2 mt-5">
+        <Checkbox
           id="rememberMe"
-          checked={isRememberMe}
-          onChange={toggleRememberMe}
-          className="rounded-full outline-none focus:ring-0"
+          checked={loginData.isRememberMe}
+          onCheckedChange={(value) => handleValues("isRememberMe", value)}
         />
-
-        <label htmlFor="rememberMe" className="cursor-pointer">
+        <label
+          htmlFor="rememberMe"
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
           Remember Me
         </label>
       </div>
 
-      <button
+      <Button
         type="submit"
-        className="w-full px-5 py-2 my-5 text-white bg-gray-300 rounded-full outline-none active:bg-gray-400 bg-gradient-to-b from-[#977FFF] to-[#6F4FFF] focus:drop-shadow-[0_6px_6px_rgba(151,127,255,0.75)]"
+        variant="primary"
+        shadow="default"
+        className="w-full my-5"
       >
         Sign In
-      </button>
+      </Button>
     </form>
   );
 };
-
-export default Login;

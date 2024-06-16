@@ -1,58 +1,67 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { UserContext } from "@/context/UserContext";
 
-const useLoginForm = (navigate) => {
-  const [username, setUsername] = useState(
-    JSON.parse(localStorage.getItem("isRememberMe"))
-      ? localStorage.getItem("userLoggedIn")
-      : ""
-  );
-  const [isUsernameNotFound, setIsUsernameNotFound] = useState(false);
-  const [isRememberMe, setIsRememberMe] = useState(
-    JSON.parse(localStorage.getItem("isRememberMe")) || false
-  );
+export const useLoginForm = () => {
+  const { users, userLoggedIn, userLogin } = useContext(UserContext);
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-    setIsUsernameNotFound(false);
+  const navigate = useNavigate();
+
+  const loginSchema = yup.object().shape({
+    username: yup
+      .string()
+      .required("Username is required")
+      .oneOf(
+        users.map((user) => user.username),
+        "User not found"
+      ),
+  });
+
+  const {
+    setValue,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    resolver: yupResolver(loginSchema),
+    defaultValues: {
+      username: userLoggedIn || "",
+      isRememberMe: JSON.parse(localStorage.getItem("isRememberMe")),
+    },
+  });
+
+  const [loginData, setLoginData] = useState({
+    username: userLoggedIn || "",
+    isRememberMe: JSON.parse(localStorage.getItem("isRememberMe") || false),
+  });
+
+  const handleValues = (name, value) => {
+    setLoginData((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+    setValue(name, value, { shouldValidate: false });
   };
 
-  const handleBlur = () => {
-    setIsUsernameNotFound(false);
-  };
+  const loginUser = (data) => {
+    userLogin(data);
 
-  const toggleRememberMe = (e) => {
-    const isChecked = e.target.checked;
-    setIsRememberMe(isChecked);
-    localStorage.setItem("isRememberMe", isChecked);
-  };
+    setLoginData({
+      username: "",
+      isRememberMe: JSON.parse(localStorage.getItem("isRememberMe")),
+    });
 
-  const handleLoginSubmit = (e) => {
-    e.preventDefault();
-
-    let users = JSON.parse(localStorage.getItem("users"));
-
-    const foundUser = users?.find((user) => user.username === username);
-
-    if (!foundUser) {
-      setIsUsernameNotFound(true);
-      setIsRememberMe(false);
-      localStorage.setItem("isRememberMe", false);
-    } else {
-      localStorage.setItem("isLoggedIn", true);
-      localStorage.setItem("userLoggedIn", username);
-      navigate("/dashboard");
-    }
+    navigate("/dashboard");
   };
 
   return {
-    username,
-    isUsernameNotFound,
-    isRememberMe,
-    handleUsernameChange,
-    handleBlur,
-    toggleRememberMe,
-    handleLoginSubmit,
+    loginData,
+    setLoginData,
+    handleSubmit,
+    errors,
+    handleValues,
+    loginUser,
   };
 };
-
-export default useLoginForm;

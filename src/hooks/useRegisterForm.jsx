@@ -1,57 +1,94 @@
-import { useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useState, useContext } from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { UserContext } from "@/context/UserContext";
+import { useNavigate } from "react-router-dom";
 
-const useRegisterForm = (navigate) => {
-  const [formData, setFormData] = useState({ fullName: "", username: "" });
-  const [usernameExists, setUsernameExists] = useState(false);
-  const [isUsernameValid, setIsUsernameValid] = useState(true);
-  const [isFullNameValid, setIsFullNameValid] = useState(true);
+const useRegisterForm = () => {
+  const { users, addUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
-  const validateFullName = (fullName) =>
-    /^[A-Za-z][A-Za-z\s]{0,59}$/.test(fullName);
-  const validateUsername = (username) => /^[a-zA-Z0-9]{4,}$/.test(username);
+  const registerSchema = yup.object().shape({
+    fullName: yup
+      .string()
+      .required("Full Name is required")
+      .transform((value) => value.trim())
+      .min(4, "Full Name must be at least 4 characters")
+      .max(255, "Full Name cannot exceed 255 characters")
+      .matches(
+        /^[A-Za-z\s]+$/,
+        "Full Name must only contain letters and spaces"
+      )
+      .test(
+        "no-consecutive-spaces",
+        "Full Name cannot contain consecutive spaces",
+        (value) => {
+          return !/\s{2,}/.test(value);
+        }
+      ),
+    username: yup
+      .string()
+      .transform((value) => value.trim())
+      .min(4, "Username must be at least 4 characters")
+      .max(255, "Username cannot exceed 255 characters")
+      .matches(
+        /^[a-zA-Z0-9_]+$/,
+        "Username must only contain letters, numbers, or underscores"
+      )
+      .required("Username is required")
+      .test("checkDuplicateUsername", "Username already exists", (value) => {
+        return !users.some((user) => user.username === value);
+      }),
+  });
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const {
+    setValue,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(registerSchema),
+    defaultValues: {
+      fullName: "",
+      username: "",
+    },
+  });
 
-    if (name === "username") setIsUsernameValid(validateUsername(value));
-    else if (name === "fullName") setIsFullNameValid(validateFullName(value));
+  const [registerData, setRegisterData] = useState({
+    fullName: "",
+    username: "",
+  });
+
+  const handleValues = (name, value) => {
+    setRegisterData((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+    setValue(name, value, { shouldValidate: true });
   };
 
-  const handleBlur = () => setUsernameExists(false);
+  const registerUser = (data) => {
+    addUser(data);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { fullName, username } = formData;
+    setRegisterData({
+      fullName: "",
+      username: "",
+    });
 
-    if (!validateFullName(fullName) || !validateUsername(username)) {
-      setIsFullNameValid(validateFullName(fullName));
-      setIsUsernameValid(validateUsername(username));
-      return;
-    }
+    reset();
 
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-    const userExists = users.some((user) => user.username === username);
-
-    if (userExists) {
-      setUsernameExists(true);
-      setIsUsernameValid(false);
-    } else {
-      const newUser = { id: users.length + 1, fullName, username, tasks: [] };
-      localStorage.setItem("users", JSON.stringify([...users, newUser]));
-      setUsernameExists(false);
-      navigate("/login");
-    }
+    navigate("/login");
   };
 
   return {
-    formData,
-    usernameExists,
-    isUsernameValid,
-    isFullNameValid,
-    handleChange,
-    handleBlur,
+    registerData,
+    setRegisterData,
     handleSubmit,
+    errors,
+    reset,
+    handleValues,
+    registerUser,
   };
 };
 

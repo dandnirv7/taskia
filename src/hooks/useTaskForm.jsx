@@ -1,42 +1,56 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { toast } from "@/components/ui/use-toast";
 
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { TaskContext } from "@/context/TaskContext";
 
-import { v4 as uuidv4 } from "uuid";
+export const useTaskForm = ({ task }) => {
+  const { addTask, updateTask } = useContext(TaskContext);
 
-const addTaskSchema = yup.object().shape({
-  taskName: yup.string().required("Taskname is required"),
-  priority: yup
-    .string()
-    .oneOf(["low", "medium", "high"], "Priority level can't be empty")
-    .required("Priority level can't be empty"),
-  deadline: yup
-    .date()
-    .required("Date is required")
-    .typeError("Date is required"),
-});
+  const PRIORITY_LEVEL = ["low", "medium", "high"];
 
-const useTaskForm = () => {
+  const addTaskSchema = yup.object().shape({
+    taskName: yup.string().required("Taskname can't be empty"),
+    priority: yup
+      .string()
+      .oneOf(PRIORITY_LEVEL, "Priority level can't be empty")
+      .required("Priority level can't be empty"),
+    deadline: yup.string().required("Deadline can't be empty"),
+  });
+
   const {
-    register,
     handleSubmit,
     setValue,
-    reset,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(addTaskSchema),
+    defaultValues: {
+      taskName: task ? task.taskName : "",
+      priority: task ? task.priority : "",
+      deadline: task ? task.deadline : "",
+    },
   });
 
   const [formData, setFormData] = useState({
-    taskName: "",
-    priority: "",
-    deadline: null,
+    taskName: task ? task.taskName : "",
+    priority: task ? task.priority : "",
+    deadline: task ? task.deadline : "",
   });
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleChangeValues = (name, value) => {
+  useEffect(() => {
+    if (task) {
+      setFormData({
+        taskName: task.taskName,
+        priority: task.priority,
+        deadline: task.deadline,
+      });
+    }
+  }, [task]);
+
+  const handleValues = (name, value) => {
     setFormData((prevValues) => ({
       ...prevValues,
       [name]: value,
@@ -44,54 +58,33 @@ const useTaskForm = () => {
     setValue(name, value, { shouldValidate: true });
   };
 
-  const addTask = (data) => {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const userLoggedIn = localStorage.getItem("userLoggedIn");
-    const currentUser =
-      users.find((user) => user.username === userLoggedIn) || {};
-    const { tasks } = currentUser;
+  const handleOpenChange = (open) => {
+    setIsOpen(open);
+  };
+  const onSubmit = (data) => {
+    if (task) {
+      updateTask({ ...task, ...data });
+      handleOpenChange(false);
+    } else {
+      addTask(data);
+    }
 
-    const Toast = () => {
-      toast({
-        description: "Task added successfully!",
-        variant: "success",
-      });
-    };
-
-    const newTask = {
-      createdAt: new Date(),
-      deadline: data.deadline,
-      id: uuidv4(),
-      priority: data.priority,
-      status: "in progress",
-      title: data.taskName,
-    };
-
-    const updatedTasks = [...tasks, newTask];
-
-    const updatedUsers = users.map((user) =>
-      user.username === userLoggedIn ? { ...user, tasks: updatedTasks } : user
-    );
-
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
-    Toast();
-
-    reset();
     setFormData({
       taskName: "",
       priority: "",
-      deadline: null,
+      deadline: "",
     });
+
+    reset();
   };
 
   return {
-    register,
     handleSubmit,
     formData,
     errors,
-    handleChangeValues,
-    addTask,
+    handleValues,
+    onSubmit,
+    isOpen,
+    handleOpenChange,
   };
 };
-
-export default useTaskForm;

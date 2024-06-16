@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import priority from "@/assets/img/layer.svg";
 
 import {
   Select,
@@ -11,10 +12,19 @@ import {
 import { Label } from "@/components/ui/label";
 
 export const SelectPriority = ({ value, onChange, errors }) => (
-  <div className="grid items-center gap-2">
+  <div className="relative space-y-1">
     <Label htmlFor="priority">Priority</Label>
+    <img
+      src={priority}
+      alt="priority-icon"
+      className="absolute top-[32px] left-3 w-6 h-6"
+    />
     <Select value={value} onValueChange={(value) => onChange(value)}>
-      <SelectTrigger id="priority">
+      <SelectTrigger
+        id="priority"
+        className="pl-12"
+        error={errors ? true : false}
+      >
         <SelectValue placeholder="Select the level of task" />
       </SelectTrigger>
       <SelectContent>

@@ -21,8 +21,8 @@ const Card = () => {
   };
 
   const formattedTaskName = (taskName) => {
-    if (taskName.length >= 50) {
-      return taskName.substring(0, 50).trim().concat("...");
+    if (taskName?.length >= 50) {
+      return taskName?.substring(0, 50).trim().concat("...");
     }
 
     return taskName;
@@ -92,7 +92,7 @@ const Card = () => {
               ) : (
                 <>
                   <Button
-                    variant="outline"
+                    variant="complete"
                     type="button"
                     onClick={() => completedTask(task.id)}
                     className="px-5 py-3 font-semibold text-green-500 border border-green-500 rounded-full"
@@ -103,7 +103,7 @@ const Card = () => {
                 </>
               )}
               <Button
-                variant="outline"
+                variant="delete"
                 type="button"
                 onClick={() => deleteTask(task.id)}
                 className="px-5 py-3 font-semibold text-red-500 border border-red-500 rounded-full"

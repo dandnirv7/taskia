@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import { useTaskForm } from "@/hooks/useTaskForm";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,10 +10,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { useTaskForm } from "@/hooks/useTaskForm";
-import { TaskName } from "@/components/elements/TaskName";
+import { TextInput } from "@/components/elements/TextInput";
 import { SelectPriority } from "@/components/elements/SelectPriority";
 import { DatePicker } from "@/components/elements/DatePicker";
+
+import noteFavorite from "@/assets/img/note-favorite-outline.svg";
 
 export const DialogTask = ({ task }) => {
   const {
@@ -27,7 +30,11 @@ export const DialogTask = ({ task }) => {
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant={task ? "edit" : "outline"}>
+        <Button
+          variant={task ? "edit" : "primary"}
+          size="lg"
+          shadow={task ? "" : "default"}
+        >
           {task ? "Edit" : "Add New Task"}
         </Button>
       </DialogTrigger>
@@ -36,10 +43,14 @@ export const DialogTask = ({ task }) => {
           {task ? "Edit Task" : ""}
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid items-center grid-rows-3 gap-4 mb-4">
-            <TaskName
+          <div className="flex flex-col justify-center gap-4 mb-4">
+            <TextInput
+              id="taskName"
+              image={noteFavorite}
+              label="Taskname"
               value={formData.taskName}
               onChange={(e) => handleValues("taskName", e.target.value)}
+              placeholder="Enter your task"
               errors={errors.taskName}
             />
 
@@ -55,7 +66,13 @@ export const DialogTask = ({ task }) => {
             />
           </div>
           <DialogFooter>
-            <Button type="submit" className="w-full">
+            <Button
+              variant="primary"
+              shadow="default"
+              type="submit"
+              className="w-full my-3"
+              size="lg"
+            >
               {task ? "Update Task" : "Save New Task"}
             </Button>
           </DialogFooter>

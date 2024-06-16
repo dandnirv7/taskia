@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
-import Sidebar from "@components/Sidebar";
-import MainContent from "@components/MainContent";
-import { Toaster } from "../ui/toaster";
+import Sidebar from "@/components/Sidebar";
+import MainContent from "@/components/MainContent";
+import { Toaster } from "@/components/ui/toaster";
 
 const Layout = ({ children }) => {
   return (

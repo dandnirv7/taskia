@@ -31,7 +31,7 @@ const Sidebar = () => {
               <p className="text-base font-semibold">Overview</p>
             </div>
           </Link>
-          <Link to="/manage-task">
+          <Link to="/dashboard/manage-task">
             <div className="flex flex-row gap-3 px-4 py-2.5 border border-[#ffd88d] drop-shadow-[0_10px_10px_rgba(255,216,141,0.75)] rounded-full mt-4 bg-[#ffd88d]">
               <img src={Layer} alt="layer" />
               <p className="text-base font-semibold">Manage Task</p>

@@ -10,7 +10,6 @@ export const TaskProvider = ({ children }) => {
   const users = JSON.parse(localStorage.getItem("users"));
   const currentUser = users.find((user) => user.username === userLoggedIn);
   const [tasks, setTasks] = useState([]);
-  // const [isOpen, setIsOpen] = useState(null);
 
   const storedTasks = useMemo(() => {
     return currentUser ? currentUser.tasks : [];
@@ -37,8 +36,6 @@ export const TaskProvider = ({ children }) => {
     );
 
     localStorage.setItem("users", JSON.stringify(updatedUsers));
-
-    // setIsOpen(false);
 
     toast({
       description: "Task added successfully!",
@@ -119,8 +116,6 @@ export const TaskProvider = ({ children }) => {
         completedTask,
         editTask,
         updateTask,
-        // isOpen,
-        // setIsOpen,
       }}
     >
       {children}

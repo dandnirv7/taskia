@@ -13,12 +13,15 @@ const SelectGroup = SelectPrimitive.Group;
 const SelectValue = SelectPrimitive.Value;
 
 const SelectTrigger = React.forwardRef(
-  ({ className, children, ...props }, ref) => (
+  ({ className, children, error, ...props }, ref) => (
     <SelectPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex h-10 w-full items-center justify-between rounded-full border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 focus:ring-[#977FFF]",
-        className
+        "flex h-10 w-full items-center justify-between rounded-full border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 focus:ring-[#977FFF] hover:bg-accent hover:text-accent-foreground",
+        className,
+        error
+          ? "focus-visible:ring-red-500 border-red-500"
+          : "border-input focus-visible:ring-[#977FFF] focus:border-input"
       )}
       {...props}
     >

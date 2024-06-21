@@ -20,15 +20,21 @@ const buttonVariants = cva(
           "border border-input hover:bg-green-100/50 focus-visible:bg-green-100/50 bg-background focus-visible:ring-offset-0 focus-visible:ring-green-500 text-green-500 border-green-500",
         error:
           "border border-input bg-background hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring  border border-red-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-red-500 focus:border-input",
+        sidebar:
+          "mt-4 w-full justify-start flex flex-row gap-3 border border-input hover:ring-2 hover:ring-offset-2 hover:ring-[#FFD88D]  bg-background hover:bg-[#FFD88D]/60 hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-[#FFD88D]/60 focus:bg-[#FFD88D]/60 focus:border-input",
+        activeSidebar:
+          "justify-start w-full flex flex-row gap-3 border border-[#FFD88D] rounded-full mt-4 bg-[#FFD88D] focus-visible:ring-2 focus-visible:ring-[#FFD88D] hover:ring-2 hover:ring-offset-2 hover:ring-[#FFD88D]",
       },
       size: {
         default: "h-10 px-4 py-2",
+        sidebar: "px-4 py-2.5",
         sm: "h-9 px-3",
         lg: "h-11 px-8",
         icon: "h-10 w-10",
       },
       shadow: {
         default: "focus:drop-shadow-[0_6px_6px_rgba(151,127,255,0.75)]",
+        sidebar: "drop-shadow-[0_10px_10px_rgba(255,216,141,0.75)]",
       },
     },
     defaultVariants: {

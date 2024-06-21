@@ -1,10 +1,13 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import ProtectedRoute from "@/routes/ProtectedRoute";
+
+import Layout from "@/components/layout/Layout";
+
 import NotFound from "@/pages/NotFound";
 import Register from "@/pages/Register";
 import Login from "@/pages/Login";
-import ProtectedRoute from "@/routes/ProtectedRoute";
-import Layout from "@/components/layout/Layout";
 import Dashboard from "@/pages/Dashboard";
+import Search from "@/pages/Search";
 
 import { TaskProvider } from "@/context/TaskContext";
 import { UserProvider } from "@/context/UserContext";
@@ -31,15 +34,30 @@ export default function App() {
           }
         />
         <Route
-          index
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Layout>
+              <UserProvider>
                 <TaskProvider>
-                  <Dashboard />
+                  <Layout>
+                    <Dashboard />
+                  </Layout>
                 </TaskProvider>
-              </Layout>
+              </UserProvider>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/search"
+          element={
+            <ProtectedRoute>
+              <UserProvider>
+                <TaskProvider>
+                  <Layout>
+                    <Search />
+                  </Layout>
+                </TaskProvider>
+              </UserProvider>
             </ProtectedRoute>
           }
         />

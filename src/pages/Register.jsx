@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { FormRegister } from "@/components/FormRegister";
-import Logo from "@/assets/img/logo.svg";
+import { logo } from "@/assets/img/images";
 
 const Register = () => {
   return (
     <div className="px-10 py-6 mx-auto bg-white border w-[450px] rounded-3xl translate-y-1/4">
       <div className="flex justify-center mt-5">
-        <img src={Logo} alt="logo" />
+        <img src={logo} alt="logo" />
       </div>
       <div className="pb-4 my-8 border-b border-slate-200">
         <h1 className="text-2xl font-bold">Add New User</h1>

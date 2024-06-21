@@ -1,7 +1,9 @@
-import noteFavoriteDark from "@/assets/img/note-favorite-dark-orange.svg";
-import { DialogTask } from "@/components/fragments/DialogTask";
+import PropTypes from "prop-types";
 
-const EmptyTask = () => {
+import { DialogTask } from "@/components/fragments/DialogTask";
+import { noteFavoriteDark } from "@/assets/img/images";
+
+export const EmptyState = ({ title, message }) => {
   return (
     <div className="w-[350px] rounded-3xl p-8 bg-white h-[330px] flex flex-col items-center justify-center mx-auto mt-8">
       <div className="flex flex-col items-center justify-center mb-8">
@@ -9,8 +11,8 @@ const EmptyTask = () => {
           <img src={noteFavoriteDark} alt="tasks empty" />
         </div>
         <div className="mt-6 text-center">
-          <h1 className="text-xl font-bold">Oops! No Task</h1>
-          <p className="text-md">You need to create some tasks for you to do</p>
+          <h1 className="text-xl font-bold">{title}</h1>
+          <p className="text-md">{message}</p>
         </div>
       </div>
       <DialogTask />
@@ -18,4 +20,7 @@ const EmptyTask = () => {
   );
 };
 
-export default EmptyTask;
+EmptyState.propTypes = {
+  title: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
+};

@@ -1,32 +1,24 @@
-import profile from "@/assets/img/profile-circle.svg";
-import ghost from "@/assets/img/ghost.svg";
-import layer from "@/assets/img/layer.svg";
-import clockRed from "@/assets/img/clock-red.svg";
-import flag from "@/assets/img/flag.svg";
-import greenFlag from "@/assets/img/green-flag.svg";
 import PropTypes from "prop-types";
 import { useContext } from "react";
 import { TaskContext } from "@/context/TaskContext";
+
+import {
+  profile,
+  ghost,
+  layer,
+  clockRed,
+  flag,
+  greenFlag,
+} from "@/assets/img/images";
+
 import { Button } from "@/components/ui/button.jsx";
 import { DialogTask } from "@/components/fragments/DialogTask";
 
-const Card = () => {
-  const { tasks, userLoggedIn, deleteTask, editTask, completedTask } =
+import { toDate, truncateText } from "@/utils/formatters";
+
+export const Card = ({ tasks }) => {
+  const { userLoggedIn, deleteTask, editTask, completedTask } =
     useContext(TaskContext);
-
-  const formattedDate = (dateString) => {
-    const date = new Date(dateString);
-    const options = { day: "2-digit", month: "long", year: "numeric" };
-    return date.toLocaleDateString("en-GB", options);
-  };
-
-  const formattedTaskName = (taskName) => {
-    if (taskName?.length >= 50) {
-      return taskName?.substring(0, 50).trim().concat("...");
-    }
-
-    return taskName;
-  };
 
   return (
     <>
@@ -45,10 +37,10 @@ const Card = () => {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold">
-                    {formattedTaskName(task.taskName)}
+                    {truncateText(task.taskName, 50)}
                   </h2>
                   <p className="text-[14px] text-[#7E7997]">
-                    Created at {formattedDate(task.createdAt)}
+                    Created at {toDate(task.createdAt)}
                   </p>
                 </div>
               </div>
@@ -60,7 +52,7 @@ const Card = () => {
                 <div className="flex flex-row items-center justify-center gap-1">
                   <img src={clockRed} alt="priority" />
                   <p className="text-base font-semibold text-red-500">
-                    {formattedDate(task.deadline)}
+                    {toDate(task.deadline)}
                   </p>
                 </div>
                 <div className="flex flex-row items-center justify-center gap-1">
@@ -121,5 +113,3 @@ Card.propTypes = {
   tasks: PropTypes.array,
   username: PropTypes.string,
 };
-
-export default Card;

@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { UserContext } from "@/context/UserContext";
 import { useNavigate } from "react-router-dom";
 
-const useRegisterForm = () => {
+export const useRegisterForm = () => {
   const { users, addUser } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -91,5 +91,3 @@ const useRegisterForm = () => {
     registerUser,
   };
 };
-
-export default useRegisterForm;

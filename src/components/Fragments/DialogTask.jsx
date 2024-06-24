@@ -1,4 +1,7 @@
 import PropTypes from "prop-types";
+import { useContext } from "react";
+
+import { UserContext } from "@/context/UserContext";
 import { useTaskForm } from "@/hooks/useTaskForm";
 
 import { Button } from "@/components/ui/button";
@@ -14,7 +17,7 @@ import { TextInput } from "@/components/elements/TextInput";
 import { SelectPriority } from "@/components/elements/SelectPriority";
 import { DatePicker } from "@/components/elements/DatePicker";
 
-import noteFavorite from "@/assets/img/note-favorite-outline.svg";
+import { noteOutline, noteOutlineDark } from "@/assets/images";
 
 export const DialogTask = ({ task }) => {
   const {
@@ -26,6 +29,8 @@ export const DialogTask = ({ task }) => {
     isOpen,
     handleOpenChange,
   } = useTaskForm({ task });
+
+  const { isDarkmode } = useContext(UserContext);
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -46,7 +51,7 @@ export const DialogTask = ({ task }) => {
           <div className="flex flex-col justify-center gap-4 mb-4">
             <TextInput
               id="taskName"
-              image={noteFavorite}
+              image={isDarkmode ? noteOutlineDark : noteOutline}
               label="Taskname"
               value={formData.taskName}
               onChange={(e) => handleValues("taskName", e.target.value)}

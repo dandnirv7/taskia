@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +15,18 @@ export const UserProvider = ({ children }) => {
   const currentUser = users?.find((user) => user.username === userLoggedIn);
   const rememberMe = JSON.parse(localStorage.getItem("isRememberMe"));
 
+  const [isDarkmode, setIsDarkmode] = useState(
+    localStorage.getItem("isDarkmode") === "true"
+  );
+
+  useEffect(() => {
+    if (isDarkmode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("isDarkmode", isDarkmode);
+  }, [isDarkmode]);
   const navigate = useNavigate();
 
   const addUser = (data) => {
@@ -54,6 +66,8 @@ export const UserProvider = ({ children }) => {
         addUser,
         userLogin,
         userLogout,
+        isDarkmode,
+        setIsDarkmode,
       }}
     >
       {children}

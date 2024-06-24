@@ -1,13 +1,18 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { logo } from "@/assets/img/images";
+
+import { UserContext } from "@/context/UserContext";
 import { FormLogin } from "@/components/FormLogin";
 
+import { logo, logoDark } from "@/assets/images";
+
 const Login = () => {
+  const { isDarkmode } = useContext(UserContext);
   return (
-    <div className="translate-y-1/3">
-      <div className="px-10 py-6 mx-auto bg-white border w-[450px] rounded-3xl">
+    <div className="translate-y-1/3 ">
+      <div className="px-10 py-6 mx-auto bg-white dark:bg-dark-secondary border w-[450px] rounded-3xl">
         <div className="flex justify-center mt-5">
-          <img src={logo} alt="logo" />
+          <img src={isDarkmode ? logoDark : logo} alt="logo" />
         </div>
         <div className="pb-4 my-5 border-b border-slate-200">
           <h1 className="text-2xl font-bold">Sign In</h1>

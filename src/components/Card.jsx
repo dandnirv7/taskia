@@ -3,22 +3,26 @@ import { useContext } from "react";
 import { TaskContext } from "@/context/TaskContext";
 
 import {
-  profile,
   ghost,
   layer,
+  layerDark,
   clockRed,
   flag,
+  flagDark,
   greenFlag,
-} from "@/assets/img/images";
+  profile,
+  profileDark,
+} from "@/assets/images";
 
 import { Button } from "@/components/ui/button.jsx";
 import { DialogTask } from "@/components/fragments/DialogTask";
 
 import { toDate, truncateText } from "@/utils/formatters";
+import { UserContext } from "@/context/UserContext";
 
 export const Card = ({ tasks }) => {
-  const { userLoggedIn, deleteTask, editTask, completedTask } =
-    useContext(TaskContext);
+  const { deleteTask, editTask, completedTask } = useContext(TaskContext);
+  const { isDarkmode, userLoggedIn } = useContext(UserContext);
 
   return (
     <>
@@ -28,7 +32,7 @@ export const Card = ({ tasks }) => {
         .map((task, index) => (
           <div
             key={index}
-            className="flex items-center justify-between p-5 bg-white rounded-3xl"
+            className="flex items-center justify-between p-5 bg-white rounded-3xl dark:bg-dark-tertiary"
           >
             <div>
               <div className="flex flex-row items-center gap-3 mb-5 ">
@@ -44,9 +48,9 @@ export const Card = ({ tasks }) => {
                   </p>
                 </div>
               </div>
-              <div className="flex flex-row items-center gap-4 capitalize">
+              <div className="flex flex-row items-center gap-4 capitalize dark:text-[#7E7997]">
                 <div className="flex flex-row items-center justify-center gap-1">
-                  <img src={layer} alt="priority" />
+                  <img src={isDarkmode ? layerDark : layer} alt="priority" />
                   <p className="text-base font-semibold">{task.priority}</p>
                 </div>
                 <div className="flex flex-row items-center justify-center gap-1">
@@ -55,9 +59,15 @@ export const Card = ({ tasks }) => {
                     {toDate(task.deadline)}
                   </p>
                 </div>
-                <div className="flex flex-row items-center justify-center gap-1">
+                <div className="flex flex-row items-center justify-center gap-1 ">
                   <img
-                    src={task.status === "completed" ? greenFlag : flag}
+                    src={
+                      task.status === "completed"
+                        ? greenFlag
+                        : isDarkmode
+                        ? flagDark
+                        : flag
+                    }
                     alt="priority"
                   />
                   <p
@@ -66,15 +76,18 @@ export const Card = ({ tasks }) => {
                       ${
                         task.status === "completed"
                           ? "text-[#51EC96]"
-                          : "text-black"
+                          : "text-black dark:text-[#7E7997]"
                       }`}
                   >
                     {task.status}
                   </p>
                 </div>
                 <div className="flex flex-row items-center justify-center gap-1">
-                  <img src={profile} alt="priority" />
-                  <p className="text-base font-semibold">{userLoggedIn}</p>
+                  <img
+                    src={isDarkmode ? profileDark : profile}
+                    alt="priority"
+                  />
+                  <p className="text-base font-semibold ">{userLoggedIn}</p>
                 </div>
               </div>
             </div>

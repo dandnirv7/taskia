@@ -23,6 +23,7 @@ export const TextInput = ({
         placeholder={placeholder}
         className="px-12 py-3"
         error={errors ? true : false}
+        autoComplete="off"
       />
       {errors && (
         <span className="text-xs font-semibold text-red-500">

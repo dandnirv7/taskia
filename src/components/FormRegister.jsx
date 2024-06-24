@@ -1,11 +1,17 @@
+import { useContext } from "react";
+
+import { UserContext } from "@/context/UserContext";
+import { useRegisterForm } from "@/hooks/useRegisterForm";
+
 import { TextInput } from "@/components/elements/TextInput";
-import useRegisterForm from "@/hooks/useRegisterForm";
 import { Button } from "@/components/ui/button";
-import profile from "@/assets/img/profile-circle.svg";
+
+import { profile, profileDark } from "@/assets/images";
 
 export const FormRegister = () => {
   const { handleSubmit, errors, handleValues, registerUser, registerData } =
     useRegisterForm();
+  const { isDarkmode } = useContext(UserContext);
 
   return (
     <form onSubmit={handleSubmit(registerUser)}>
@@ -13,7 +19,7 @@ export const FormRegister = () => {
         <div className="flex flex-col gap-2">
           <TextInput
             id="fullName"
-            image={profile}
+            image={isDarkmode ? profileDark : profile}
             alt="profil-icon"
             label="Full Name"
             value={registerData.fullName}
@@ -24,7 +30,7 @@ export const FormRegister = () => {
 
           <TextInput
             id="username"
-            image={profile}
+            image={isDarkmode ? profileDark : profile}
             alt="profil-icon"
             label="Username"
             value={registerData.username}

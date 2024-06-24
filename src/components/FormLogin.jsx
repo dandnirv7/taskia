@@ -1,18 +1,24 @@
+import { useContext } from "react";
+
 import { useLoginForm } from "@/hooks/useLoginForm";
+import { UserContext } from "@/context/UserContext";
+
 import { TextInput } from "@/components/elements/TextInput";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import profile from "@/assets/img/profile-circle.svg";
+
+import { profile, profileDark } from "@/assets/images";
 
 export const FormLogin = () => {
   const { handleSubmit, handleValues, loginData, errors, loginUser } =
     useLoginForm();
+  const { isDarkmode } = useContext(UserContext);
 
   return (
     <form onSubmit={handleSubmit(loginUser)}>
       <TextInput
         id="username"
-        image={profile}
+        image={isDarkmode ? profileDark : profile}
         alt="profil-icon"
         label="Username"
         value={loginData.username}
